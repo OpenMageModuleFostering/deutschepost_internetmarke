@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * DeutschePost OneClickForApp
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to
+ * newer versions in the future.
+ *
+ * PHP version 5
+ *
+ * @category  DeutschePost
+ * @package   DeutschePost_OneClickForApp
+ * @author    Christoph Aßmann <christoph.assmann@netresearch.de>
+ * @copyright 2016 Netresearch GmbH & Co. KG
+ * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link      http://www.netresearch.de/
+ */
+-->
+<config>
+    <modules>
+        <DeutschePost_OneClickForApp>
+            <version>1.0.0</version>
+        </DeutschePost_OneClickForApp>
+    </modules>
+    <global>
+        <helpers>
+            <deutschepost_oneclickforapp>
+                <class>DeutschePost_OneClickForApp_Helper</class>
+            </deutschepost_oneclickforapp>
+        </helpers>
+        <models>
+            <deutschepost_oneclickforapp>
+                <class>DeutschePost_OneClickForApp_Model</class>
+                <resourceModel>deutschepost_oneclickforapp_resource</resourceModel>
+            </deutschepost_oneclickforapp>
+            <deutschepost_oneclickforapp_resource>
+                <class>DeutschePost_OneClickForApp_Model_Resource</class>
+                <entities>
+                    <franking>
+                        <table>deutschepost_internetmarke_franking</table>
+                    </franking>
+                    <pageformat>
+                        <table>deutschepost_internetmarke_pageformat</table>
+                    </pageformat>
+                </entities>
+            </deutschepost_oneclickforapp_resource>
+        </models>
+        <blocks>
+            <deutschepost_oneclickforapp>
+                <class>DeutschePost_OneClickForApp_Block</class>
+            </deutschepost_oneclickforapp>
+        </blocks>
+        <resources>
+            <deutschepost_1c4a_setup>
+                <setup>
+                    <module>DeutschePost_OneClickForApp</module>
+                </setup>
+            </deutschepost_1c4a_setup>
+        </resources>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <DeutschePost_OneClickForApp after="Mage_Adminhtml">DeutschePost_OneClickForApp_Adminhtml</DeutschePost_OneClickForApp>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <translate>
+            <modules>
+                <deutschepost_oneclickforapp>
+                    <files>
+                        <default>DeutschePost_OneClickForApp.csv</default>
+                    </files>
+                </deutschepost_oneclickforapp>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <deutschepost_oneclickforapp module="DeutschePost_OneClickForApp">
+                    <file>deutschepost_1c4a.xml</file>
+                </deutschepost_oneclickforapp>
+            </updates>
+        </layout>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <deutschepost_oneclickforapp_checkout>
+                <schedule>
+                    <cron_expr>*/15 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>deutschepost_oneclickforapp/cron::checkoutFrankings</model>
+                </run>
+            </deutschepost_oneclickforapp_checkout>
+        </jobs>
+    </crontab>
+    <default>
+        <carriers>
+            <dpim>
+                <oneclickforapp_wsdl><![CDATA[https://internetmarke.deutschepost.de/OneClickForAppV3?wsdl]]></oneclickforapp_wsdl>
+                <oneclickforapp_key_phase><![CDATA[1]]></oneclickforapp_key_phase>
+                <oneclickforapp_user_token backend_model="adminhtml/system_config_backend_serialized"/>
+                <oneclickforapp_portokasse_password backend_model="adminhtml/system_config_backend_encrypted"/>
+            </dpim>
+        </carriers>
+        <dpim_helper>
+            <order>
+                <class>deutschepost_oneclickforapp/data</class>
+            </order>
+        </dpim_helper>
+        <dpim_config_validator>
+            <order>
+                <class>deutschepost_oneclickforapp/config_validator</class>
+            </order>
+        </dpim_config_validator>
+    </default>
+    <phpunit>
+        <suite>
+            <modules>
+                <DeutschePost_OneClickForApp/>
+            </modules>
+        </suite>
+    </phpunit>
+</config>

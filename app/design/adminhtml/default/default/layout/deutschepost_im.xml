@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * DeutschePost Internetmarke
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to
+ * newer versions in the future.
+ *
+ * PHP version 5
+ *
+ * @category  DeutschePost
+ * @package   DeutschePost_Internetmarke
+ * @author    Christoph Aßmann <christoph.assmann@netresearch.de>
+ * @copyright 2016 Netresearch GmbH & Co. KG
+ * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link      http://www.netresearch.de/
+ */
+-->
+<layout>
+    <adminhtml_sales_order_shipment_new>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/deutschepost_im/shipment.js</name>
+            </action>
+        </reference>
+        <reference name="shipment_tracking">
+            <block type="deutschepost_internetmarke/adminhtml_sales_order_shipment_create_dpim"
+                   name="deutschepost_internetmarke_create_dpim"
+                   template="deutschepost_im/sales/order/shipment/create/dpim.phtml"/>
+        </reference>
+    </adminhtml_sales_order_shipment_new>
+</layout>

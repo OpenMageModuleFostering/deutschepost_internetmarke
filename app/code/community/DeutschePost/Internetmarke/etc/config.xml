@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * DeutschePost Internetmarke
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to
+ * newer versions in the future.
+ *
+ * PHP version 5
+ *
+ * @category  DeutschePost
+ * @package   DeutschePost_Internetmarke
+ * @author    Christoph Aßmann <christoph.assmann@netresearch.de>
+ * @copyright 2016 Netresearch GmbH & Co. KG
+ * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link      http://www.netresearch.de/
+ */
+-->
+<config>
+    <modules>
+        <DeutschePost_Internetmarke>
+            <version>1.0.0</version>
+        </DeutschePost_Internetmarke>
+    </modules>
+    <global>
+        <blocks>
+            <deutschepost_internetmarke>
+                <class>DeutschePost_Internetmarke_Block</class>
+            </deutschepost_internetmarke>
+        </blocks>
+        <helpers>
+            <deutschepost_internetmarke>
+                <class>DeutschePost_Internetmarke_Helper</class>
+            </deutschepost_internetmarke>
+        </helpers>
+        <models>
+            <deutschepost_internetmarke>
+                <class>DeutschePost_Internetmarke_Model</class>
+            </deutschepost_internetmarke>
+        </models>
+        <resources>
+            <deutschepost_im_setup>
+                <setup>
+                    <module>DeutschePost_Internetmarke</module>
+                </setup>
+            </deutschepost_im_setup>
+        </resources>
+        <sales>
+            <shipping>
+                <carriers>
+                    <deutschepost_internetmarke>
+                        <class>DeutschePost_Internetmarke_Model_Shipping_Carrier_Internetmarke</class>
+                    </deutschepost_internetmarke>
+                </carriers>
+            </shipping>
+        </sales>
+    </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <deutschepost_internetmarke>
+                    <files>
+                        <default>DeutschePost_Internetmarke.csv</default>
+                    </files>
+                </deutschepost_internetmarke>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <deutschepost_internetmarke module="DeutschePost_Internetmarke">
+                    <file>deutschepost_im.xml</file>
+                </deutschepost_internetmarke>
+            </updates>
+        </layout>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <add_shipping_order_settings>
+                        <class>deutschepost_internetmarke/observer</class>
+                        <method>addShippingOrderSettings</method>
+                        <type>singleton</type>
+                    </add_shipping_order_settings>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <core_copy_fieldset_sales_convert_order_to_shipment>
+                <observers>
+                    <init_shipping_order>
+                        <class>deutschepost_internetmarke/observer</class>
+                        <method>initShippingOrder</method>
+                        <type>singleton</type>
+                    </init_shipping_order>
+                </observers>
+            </core_copy_fieldset_sales_convert_order_to_shipment>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <create_shipping_order>
+                        <class>deutschepost_internetmarke/observer</class>
+                        <method>createShippingOrder</method>
+                        <type>singleton</type>
+                    </create_shipping_order>
+                </observers>
+            </sales_order_shipment_save_after>
+        </events>
+    </adminhtml>
+    <default>
+        <carriers>
+            <dpim>
+                <title><![CDATA[Deutsche Post INTERNETMARKE]]></title>
+                <active>1</active>
+                <logging_enabled>0</logging_enabled>
+                <log_level>3</log_level>
+                <allowed_methods><![CDATA[Deutsche Post INTERNETMARKE]]></allowed_methods>
+                <model>deutschepost_internetmarke/shipping_carrier_internetmarke</model>
+            </dpim>
+        </carriers>
+        <dpim_helper>
+            <product>
+                <class>deutschepost_internetmarke/product</class>
+            </product>
+            <order>
+                <class>deutschepost_internetmarke/order</class>
+            </order>
+        </dpim_helper>
+        <dpim_config_validator>
+            <base>
+                <class>deutschepost_internetmarke/config_validator</class>
+            </base>
+        </dpim_config_validator>
+    </default>
+    <phpunit>
+        <suite>
+            <modules>
+                <DeutschePost_Internetmarke/>
+            </modules>
+        </suite>
+    </phpunit>
+</config>

@@ -1,0 +1,47 @@
+<?php
+/**
+ * DeutschePost ProdWs
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to
+ * newer versions in the future.
+ *
+ * PHP version 5
+ *
+ * @category  design
+ * @package   default_default
+ * @author    Christoph Aßmann <christoph.assmann@netresearch.de>
+ * @copyright 2016 Netresearch GmbH & Co. KG
+ * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link      http://www.netresearch.de/
+ */
+
+/** @var DeutschePost_ProdWs_Block_Adminhtml_System_Config_Products $this */
+?>
+<ul>
+    <li>
+        <?php if (!$this->isConfigValid()): ?>
+            <img
+                src="<?php echo $this->getSkinUrl('images/error_msg_icon.gif') ?>"
+                alt="<?php echo $this->__('Credentials Missing') ?>"
+                style="float: left; margin-right: 10px;" />
+            <span><?php echo $this->__('Please configure above credentials to retrieve the product list.') ?></span>
+        <?php elseif ($this->isProductListAvailable()): ?>
+            <img
+                src="<?php echo $this->getSkinUrl('images/success_msg_icon.gif') ?>"
+                alt="<?php echo $this->__('Product List Available') ?>"
+                style="float: left; margin-right: 10px;" />
+            <span><?php echo $this->__('Sales products are available.') ?></span>
+        <?php else: ?>
+            <a href="<?php echo $this->getProductListUrl(); ?>"><?php echo $this->__('Retrieve Product List') ?></a>
+        <?php endif; ?>
+    </li>
+</ul>

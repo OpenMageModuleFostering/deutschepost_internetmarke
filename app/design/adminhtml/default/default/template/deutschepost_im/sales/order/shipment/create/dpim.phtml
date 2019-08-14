@@ -1,0 +1,115 @@
+<?php
+/**
+ * DeutschePost Internetmarke
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to
+ * newer versions in the future.
+ *
+ * PHP version 5
+ *
+ * @category  design
+ * @package   default_default
+ * @author    Christoph Aßmann <christoph.assmann@netresearch.de>
+ * @copyright 2016 Netresearch GmbH & Co. KG
+ * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link      http://www.netresearch.de/
+ */
+?>
+<?php /** @var DeutschePost_Internetmarke_Block_Adminhtml_Sales_Order_Shipment_Create_Dpim $this */ ?>
+<?php $productOptions = $this->getProductOptions(); ?>
+<?php $serviceOptions = $this->getServiceOptions(); ?>
+<div class="grid">
+    <fieldset>
+        <legend><?php echo $this->__('Deutsche Post INTERNETMARKE') ?></legend>
+
+        <table cellspacing="0" class="data order-tables">
+            <colgroup>
+                <col width="35%"/>
+                <col width="65%"/>
+            </colgroup>
+            <tbody>
+            <tr class="odd">
+                <td><label for="dpim_order"><?php echo $this->__('Order Internetmarke') ?></label></td>
+                <td>
+                    <?php $checked = $this->isAvailableForShipment() ? 'checked="checked" ' : '' ?>
+                    <input id="dpim_order" type="checkbox" name="shipment[dpim][order]"
+                           value="1" <?php echo $checked ?>>
+                </td>
+            </tr>
+            <tr class="even">
+                <td><label for="dpim_product"><?php echo $this->__('Product') ?></label></td>
+                <td>
+                    <?php $productOptionsSize = min(count($productOptions), 10); ?>
+                    <select id="dpim_product" class="action-select validate-select" name="shipment[dpim][product]"
+                            size="<?php echo $productOptionsSize ?>">
+                        <?php foreach ($productOptions as $id => $name): ?>
+                            <option value="<?php echo $id ?>"><?php echo $name ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr class="odd">
+                <td><?php echo $this->__('Service') ?></td>
+                <td>
+                    <div id="dpim_service"></div>
+                </td>
+            </tr>
+            <tr class="even">
+                <td><?php echo $this->__('Item Amount') ?></td>
+                <td>
+                    <div>
+                        <span id="dpim_price">0 &euro;</span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    //<![CDATA[
+    var optionTemplate = new Template('<input type="radio" id="dpim_service_#{id}" class="radio" name="shipment[dpim][service]" value="#{id}" /> <label for="dpim_service_#{id}">#{name}</label><br/>');
+    var services = <?php echo json_encode($serviceOptions) ?>;
+    var associationMap = <?php echo json_encode($this->getProductAssociations()) ?>;
+    var priceMap = <?php echo json_encode($this->getOptionPrices()) ?>;
+    var locale = '<?php echo str_replace('_', '-', Mage::app()->getLocale()->getLocaleCode()); ?>';
+    var serviceControl = new AdditionalServices(
+        'dpim_product',         // ID for element with product selection
+        'dpim_service',         // ID for element with service selection
+        'dpim_price',           // ID for element with price value
+        optionTemplate,         // Template for new options
+        services,               // Array with service options
+        associationMap,         // Array with associations between product and service
+        priceMap,               // Array with all prices for products and services
+        locale                  // Transmit local code for number separation
+    );
+
+    $('dpim_product').observe('change', function () {
+        serviceControl.clear();
+        serviceControl.update(this.getValue());
+        serviceControl.calculatePrice(this.getValue());
+    });
+
+    $('dpim_service').observe('change', function (event) {
+        serviceControl.calculatePrice('', event.target.value);
+    });
+
+    $('dpim_order').observe('change', function () {
+        this.up('tr').nextSiblings().each(function (tableRow) {
+            tableRow.toggle(this.getValue());
+            tableRow.select('input', 'select').each(function (formElm) {
+                formElm.disabled = !this.getValue();
+            }, this);
+        }.bind(this));
+    });
+    //]]>
+</script>

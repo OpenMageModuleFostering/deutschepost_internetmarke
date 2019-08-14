@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * DeutschePost ProdWs
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to
+ * newer versions in the future.
+ *
+ * PHP version 5
+ *
+ * @category  DeutschePost
+ * @package   DeutschePost_ProdWs
+ * @author    Christoph Aßmann <christoph.assmann@netresearch.de>
+ * @copyright 2016 Netresearch GmbH & Co. KG
+ * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link      http://www.netresearch.de/
+ */
+-->
+<config>
+    <modules>
+        <DeutschePost_ProdWs>
+            <version>1.0.0</version>
+        </DeutschePost_ProdWs>
+    </modules>
+    <global>
+        <helpers>
+            <deutschepost_prodws>
+                <class>DeutschePost_ProdWs_Helper</class>
+            </deutschepost_prodws>
+        </helpers>
+        <models>
+            <deutschepost_prodws>
+                <class>DeutschePost_ProdWs_Model</class>
+                <resourceModel>deutschepost_prodws_resource</resourceModel>
+            </deutschepost_prodws>
+            <deutschepost_prodws_resource>
+                <class>DeutschePost_ProdWs_Model_Resource</class>
+                <entities>
+                    <product_sales>
+                        <table>deutschepost_product_sales</table>
+                    </product_sales>
+                    <product_basic>
+                        <table>deutschepost_product_basic</table>
+                    </product_basic>
+                    <product_additional>
+                        <table>deutschepost_product_additional</table>
+                    </product_additional>
+                    <product_sales_additional>
+                        <table>deutschepost_product_sales_additional</table>
+                    </product_sales_additional>
+                </entities>
+            </deutschepost_prodws_resource>
+        </models>
+        <blocks>
+            <deutschepost_prodws>
+                <class>DeutschePost_ProdWs_Block</class>
+            </deutschepost_prodws>
+        </blocks>
+        <resources>
+            <deutschepost_prodws_setup>
+                <setup>
+                    <module>DeutschePost_ProdWs</module>
+                </setup>
+            </deutschepost_prodws_setup>
+        </resources>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <DeutschePost_ProdWs after="Mage_Adminhtml">DeutschePost_ProdWs_Adminhtml</DeutschePost_ProdWs>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <translate>
+            <modules>
+                <deutschepost_prodws>
+                    <files>
+                        <default>DeutschePost_ProdWs.csv</default>
+                    </files>
+                </deutschepost_prodws>
+            </modules>
+        </translate>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <deutschepost_prodws_update_products>
+                <schedule>
+                    <config_path>carriers/dpim/prodws_schedule</config_path>
+                </schedule>
+                <run>
+                    <model>deutschepost_prodws/cron::updateProductList</model>
+                </run>
+            </deutschepost_prodws_update_products>
+        </jobs>
+    </crontab>
+    <default>
+        <carriers>
+            <dpim>
+                <prodws_wsdl><![CDATA[https://prodws.deutschepost.de:8443/ProdWSProvider_1_1/prodws?wsdl]]></prodws_wsdl>
+                <prodws_password backend_model="adminhtml/system_config_backend_encrypted"/>
+                <prodws_query_ts_product>0</prodws_query_ts_product>
+                <prodws_query_ts_catalog>0</prodws_query_ts_catalog>
+            </dpim>
+        </carriers>
+        <dpim_helper>
+            <product>
+                <class>deutschepost_prodws/data</class>
+            </product>
+        </dpim_helper>
+        <dpim_config_validator>
+            <product>
+                <class>deutschepost_prodws/config_validator</class>
+            </product>
+        </dpim_config_validator>
+    </default>
+    <phpunit>
+        <suite>
+            <modules>
+                <DeutschePost_ProdWs/>
+            </modules>
+        </suite>
+    </phpunit>
+</config>
