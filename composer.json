@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/DeutschePost_Internetmarke",
+    "name": "OpenMageModuleFostering\/DeutschePost_Internetmarke",
     "type": "magento-module",
     "license": "OSL3",
     "homepage": "",
     "description": "Deutsche Post Internetmarke",
     "authors": [
-    {
-        "name": "Christoph A\u00dfmann",
-        "email": "christoph.assmann@netresearch.de"
-    }
-],
+        {
+            "name": "Christoph A\u00dfmann",
+            "email": "christoph.assmann@netresearch.de"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
